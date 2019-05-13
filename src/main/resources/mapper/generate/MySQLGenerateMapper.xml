@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="per.san.generate.mapper.MySQLGenerateMapper">
+    <resultMap id="tableResultMap" type="per.san.generate.domain.Table">
+        <result property="tableName" column="table_name"/>
+        <result property="engine" column="engine"/>
+        <result property="comments" column="table_comment"/>
+        <result property="createTime" column="create_time"/>
+        <association property="pk" javaType="per.san.generate.domain.Column">
+            <result property="columnName" column="pk_column_name"/>
+            <result property="dataType" column="pk_data_type"/>
+            <result property="comments" column="pk_column_comment"/>
+            <result property="columnKey" column="pk_column_key"/>
+            <result property="extra" column="pk_extra"/>
+        </association>
+        <collection property="columns" ofType="per.san.generate.domain.Column">
+            <result property="columnName" column="column_name"/>
+            <result property="dataType" column="data_type"/>
+            <result property="comments" column="column_comment"/>
+            <result property="columnKey" column="column_key"/>
+            <result property="extra" column="extra"/>
+        </collection>
+    </resultMap>
+
+    <sql id="tableBaseSql">
+        ts.table_name, ts.engine, ts.table_comment, ts.create_time
+    </sql>
+
+    <sql id="columnBaseSql">
+        pk.column_name as pk_column_name, pk.data_type as pk_data_type,
+        pk.column_comment as pk_column_comment, pk.column_key as pk_column_key, pk.extra as pk_extra,
+        cs.column_name, cs.data_type, cs.column_comment, cs.column_key, cs.extra
+    </sql>
+
+    <select id="queryList" resultMap="tableResultMap">
+        select
+        <include refid="tableBaseSql"/>,
+        <include refid="columnBaseSql"/>
+        from information_schema.tables ts
+        left join information_schema.columns pk on pk.table_name = ts.table_name and pk.column_key = 'PRI'
+        left join information_schema.columns cs on cs.table_name = ts.table_name and cs.column_key &lt;&gt; 'PRI'
+        <where>
+            and ts.table_schema = (select database())
+            and cs.table_schema = (select database())
+            and pk.table_schema = (select database())
+            and ts.table_name &lt;&gt; 'databasechangeloglock'
+            and ts.table_name &lt;&gt; 'databasechangelog'
+            <if test="tableName != null and tableName.trim() != ''">
+                and ts.table_name like concat('%', #{tableName}, '%')
+            </if>
+            <if test="engine != null and engine.trim() != ''">
+                and ts.engine = #{engine}
+            </if>
+            <if test="comments != null and comments.trim() != ''">
+                and ts.table_comment like concat('%', #{comments}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="queryTable" resultMap="tableResultMap">
+        select
+        <include refid="tableBaseSql"/>,
+        <include refid="columnBaseSql"/>
+        from information_schema.tables ts
+        left join information_schema.columns pk on pk.table_name = ts.table_name and pk.column_key = 'PRI'
+        left join information_schema.columns cs on cs.table_name = ts.table_name and cs.column_key &lt;&gt; 'PRI'
+        <where>
+            and ts.table_schema = (select database())
+            and cs.table_schema = (select database())
+            and pk.table_schema = (select database())
+            <if test="tableNames != null and tableNames.size() != 0">
+                and ts.table_name in
+                <foreach collection="tableNames" item="name" open="(" close=")" separator=",">
+                    #{name}
+                </foreach>
+            </if>
+            <if test="tableNames == null or tableNames.size() == 0">
+                and ts.table_name is null
+            </if>
+        </where>
+    </select>
+
+    <select id="queryColumns" resultType="java.util.Map">
+		select column_name, data_type, column_comment,
+		       column_key, extra
+		from information_schema.columns
+ 		where table_name = #{tableName}
+ 		and table_schema = (select database())
+ 		order by ordinal_position
+    </select>
+</mapper>
