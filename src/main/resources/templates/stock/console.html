@@ -10,13 +10,46 @@
 <body class="layui-view-body">
     <div class="layui-content">
         <div class="layui-row layui-col-space20">
+            <div class="layui-col-sm3" style="margin-left: -12%"></div>
             <div class="layui-col-sm6 layui-col-md3">
                 <div class="layui-card">
                     <div class="layui-card-body chart-card">
                         <div class="chart-header">
                             <div class="metawrap">
                                 <div class="meta">
-                                    <span>总用户数</span>
+                                    <span>上证指数</span>
+                                </div>
+                                <div class="total">
+                                    <span id="sh_current_price">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <div class="content-wrap">
+                                <span class="content-wrap-left" id="sh_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                <span class="content-wrap-right" id="sh_current_percent">+0.00%</span>
+                            </div>
+                        </div>
+                        <div class="chart-footer">
+                            <div class="field">
+                                <div class="field-left">成交量(手)</div>
+                                <span class="field-right" id="sh_current_volume">0</span>
+                            </div>
+                            <div class="field">
+                                <span class="field-left">成交额(万元)</span>
+                                <span class="field-right"  id="sh_current_turnover">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-body chart-card">
+                        <div class="chart-header">
+                            <div class="metawrap">
+                                <div class="meta">
+                                    <span>深证成指</span>
                                 </div>
                                 <div class="total">2368.06</div>
                             </div>
@@ -29,8 +62,12 @@
                         </div>
                         <div class="chart-footer">
                             <div class="field">
-                                <span>日注册量</span>
-                                <span>321</span>
+                                <div class="field-left">成交量(手)</div>
+                                <span class="field-right">2305197</span>
+                            </div>
+                            <div class="field">
+                                <span class="field-left">成交额(万元)</span>
+                                <span class="field-right">22626279</span>
                             </div>
                         </div>
                     </div>
@@ -42,70 +79,25 @@
                         <div class="chart-header">
                             <div class="metawrap">
                                 <div class="meta">
-                                    <span>总用户数</span>
+                                    <span>创业板指</span>
                                 </div>
-                                <div class="total">126,560</div>
+                                <div class="total">2368.06</div>
                             </div>
                         </div>
                         <div class="chart-body">
-                            <div class="contentwrap">
-                                fsdfdsf
+                            <div class="content-wrap">
+                                <span class="content-wrap-left">+46.61</span>&nbsp;&nbsp;
+                                <span class="content-wrap-right">+1.06%</span>
                             </div>
                         </div>
                         <div class="chart-footer">
                             <div class="field">
-                                <span>日注册量</span>
-                                <span>321</span>
+                                <div class="field-left">成交量(手)</div>
+                                <span class="field-right">2305197</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-sm6 layui-col-md3">
-                <div class="layui-card">
-                    <div class="layui-card-body chart-card">
-                        <div class="chart-header">
-                            <div class="metawrap">
-                                <div class="meta">
-                                    <span>总用户数</span>
-                                </div>
-                                <div class="total">126,560</div>
-                            </div>
-                        </div>
-                        <div class="chart-body">
-                            <div class="contentwrap">
-                                fsdfdsf
-                            </div>
-                        </div>
-                        <div class="chart-footer">
                             <div class="field">
-                                <span>日注册量</span>
-                                <span>321</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-sm6 layui-col-md3">
-                <div class="layui-card">
-                    <div class="layui-card-body chart-card">
-                        <div class="chart-header">
-                            <div class="metawrap">
-                                <div class="meta">
-                                    <span>总用户数</span>
-                                </div>
-                                <div class="total">126,560</div>
-                            </div>
-                        </div>
-                        <div class="chart-body">
-                            <div class="contentwrap">
-                                fsdfdsf
-                            </div>
-                        </div>
-                        <div class="chart-footer">
-                            <div class="field">
-                                <span>日注册量</span>
-                                <span>321</span>
+                                <span class="field-left">成交额(万元)</span>
+                                <span class="field-right">22626279</span>
                             </div>
                         </div>
                     </div>
@@ -134,6 +126,54 @@
     <script th:src="@{public/stock/layui.all.js}"></script>
     <script>
      var element = layui.element;
+    </script>
+    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sh000001" charset="gb2312">
+    </script>
+    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sz399001" charset="gb2312">
+    </script>
+    <script type="text/javascript">
+        // 上证
+        var sh_elements = hq_str_s_sh000001.split(",");
+        var sh_current_price = parseFloat(sh_elements[1]).toFixed(2);
+        var sh_ups_downs = parseFloat(sh_elements[2]).toFixed(2);
+        var sh_current_percent;
+        var sh_current_ups_downs;
+        if (sh_ups_downs >= 0)  {
+            sh_current_ups_downs = '+' + ups_downs;
+            sh_current_percent = '+' + sh_elements[3] + '%';
+        }else {
+            sh_current_ups_downs = '-' + ups_downs;
+            sh_current_percent = '-' + sh_elements[3] + '%';
+        }
+        var sh_current_volume = sh_elements[4];
+        var sh_current_turnover = sh_elements[5];
+        document.getElementById('sh_current_price').innerHTML = sh_current_price;
+        document.getElementById('sh_current_ups_downs').innerHTML = sh_current_ups_downs;
+        document.getElementById('sh_current_percent').innerHTML = sh_current_percent;
+        document.getElementById('sh_current_volume').innerHTML = sh_current_volume;
+        document.getElementById('sh_current_turnover').innerHTML = sh_current_turnover;
+    </script>
+    <script type="text/javascript">
+        // 深证
+        var sz_elements = hq_str_s_sz399001.split(",");
+        var sz_current_price = parseFloat(elements[1]).toFixed(2);
+        var sz_ups_downs = parseFloat(elements[2]).toFixed(2);
+        var sz_current_percent;
+        var sz_current_ups_downs;
+        if (sz_ups_downs >= 0)  {
+            sz_current_ups_downs = '+' + ups_downs;
+            sz_current_percent = '+' + elements[3] + '%';
+        }else {
+            sz_current_ups_downs = '-' + ups_downs;
+            sz_current_percent = '-' + elements[3] + '%';
+        }
+        var sz_current_volume = elements[4];
+        var sz_current_turnover = elements[5];
+        document.getElementById('sz_current_price').innerHTML = sz_current_price;
+        document.getElementById('sz_current_ups_downs').innerHTML = sz_current_ups_downs;
+        document.getElementById('sz_current_percent').innerHTML = sz_current_percent;
+        document.getElementById('sz_current_volume').innerHTML = sz_current_volume;
+        document.getElementById('sz_current_turnover').innerHTML = sz_current_turnover;
     </script>
 </body>
 </html>
