@@ -17,7 +17,7 @@
                         <div class="chart-header">
                             <div class="metawrap">
                                 <div class="meta">
-                                    <span>上证指数</span>
+                                    <span id="sh_name">上证指数</span>
                                 </div>
                                 <div class="total">
                                     <span id="sh_current_price">0.00</span>
@@ -49,25 +49,27 @@
                         <div class="chart-header">
                             <div class="metawrap">
                                 <div class="meta">
-                                    <span>深证成指</span>
+                                    <span id="sz_name">深圳成指</span>
                                 </div>
-                                <div class="total">2368.06</div>
+                                <div class="total">
+                                    <span id="sz_current_price">0.00</span>
+                                </div>
                             </div>
                         </div>
                         <div class="chart-body">
                             <div class="content-wrap">
-                                <span class="content-wrap-left">+46.61</span>&nbsp;&nbsp;
-                                <span class="content-wrap-right">+1.06%</span>
+                                <span class="content-wrap-left" id="sz_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                <span class="content-wrap-right" id="sz_current_percent">+0.00%</span>
                             </div>
                         </div>
                         <div class="chart-footer">
                             <div class="field">
                                 <div class="field-left">成交量(手)</div>
-                                <span class="field-right">2305197</span>
+                                <span class="field-right" id="sz_current_volume">0</span>
                             </div>
                             <div class="field">
                                 <span class="field-left">成交额(万元)</span>
-                                <span class="field-right">22626279</span>
+                                <span class="field-right"  id="sz_current_turnover">0</span>
                             </div>
                         </div>
                     </div>
@@ -79,25 +81,27 @@
                         <div class="chart-header">
                             <div class="metawrap">
                                 <div class="meta">
-                                    <span>创业板指</span>
+                                    <span id="cy_name">创业板指</span>
                                 </div>
-                                <div class="total">2368.06</div>
+                                <div class="total">
+                                    <span id="cy_current_price">0.00</span>
+                                </div>
                             </div>
                         </div>
                         <div class="chart-body">
                             <div class="content-wrap">
-                                <span class="content-wrap-left">+46.61</span>&nbsp;&nbsp;
-                                <span class="content-wrap-right">+1.06%</span>
+                                <span class="content-wrap-left" id="cy_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                <span class="content-wrap-right" id="cy_current_percent">+0.00%</span>
                             </div>
                         </div>
                         <div class="chart-footer">
                             <div class="field">
                                 <div class="field-left">成交量(手)</div>
-                                <span class="field-right">2305197</span>
+                                <span class="field-right" id="cy_current_volume">0</span>
                             </div>
                             <div class="field">
                                 <span class="field-left">成交额(万元)</span>
-                                <span class="field-right">22626279</span>
+                                <span class="field-right"  id="cy_current_turnover">0</span>
                             </div>
                         </div>
                     </div>
@@ -127,26 +131,28 @@
     <script>
      var element = layui.element;
     </script>
-    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sh000001" charset="gb2312">
-    </script>
-    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sz399001" charset="gb2312">
-    </script>
+    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sh000001" charset="gb2312"></script>
+    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sz399001" charset="gb2312"></script>
+    <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sz399006" charset="gb2312"></script>
     <script type="text/javascript">
         // 上证
         var sh_elements = hq_str_s_sh000001.split(",");
+        var sh_name = sh_elements[0];
         var sh_current_price = parseFloat(sh_elements[1]).toFixed(2);
         var sh_ups_downs = parseFloat(sh_elements[2]).toFixed(2);
         var sh_current_percent;
         var sh_current_ups_downs;
         if (sh_ups_downs >= 0)  {
-            sh_current_ups_downs = '+' + ups_downs;
+            sh_current_ups_downs = '+' + sh_ups_downs;
             sh_current_percent = '+' + sh_elements[3] + '%';
         }else {
-            sh_current_ups_downs = '-' + ups_downs;
+            sh_current_ups_downs = '-' + sh_ups_downs;
             sh_current_percent = '-' + sh_elements[3] + '%';
         }
         var sh_current_volume = sh_elements[4];
         var sh_current_turnover = sh_elements[5];
+        // sh_current_turnover = (parseFloat(sh_current_turnover)/10000).toFixed(2);
+        document.getElementById('sh_name').innerHTML = sh_name;
         document.getElementById('sh_current_price').innerHTML = sh_current_price;
         document.getElementById('sh_current_ups_downs').innerHTML = sh_current_ups_downs;
         document.getElementById('sh_current_percent').innerHTML = sh_current_percent;
@@ -156,24 +162,52 @@
     <script type="text/javascript">
         // 深证
         var sz_elements = hq_str_s_sz399001.split(",");
-        var sz_current_price = parseFloat(elements[1]).toFixed(2);
-        var sz_ups_downs = parseFloat(elements[2]).toFixed(2);
+        var sz_name = sh_elements[0];
+        var sz_current_price = parseFloat(sz_elements[1]).toFixed(2);
+        var sz_ups_downs = parseFloat(sz_elements[2]).toFixed(2);
         var sz_current_percent;
         var sz_current_ups_downs;
         if (sz_ups_downs >= 0)  {
-            sz_current_ups_downs = '+' + ups_downs;
-            sz_current_percent = '+' + elements[3] + '%';
+            sz_current_ups_downs = '+' + sz_ups_downs;
+            sz_current_percent = '+' + sz_elements[3] + '%';
         }else {
-            sz_current_ups_downs = '-' + ups_downs;
-            sz_current_percent = '-' + elements[3] + '%';
+            sz_current_ups_downs = '-' + sz_ups_downs;
+            sz_current_percent = '-' + sz_elements[3] + '%';
         }
-        var sz_current_volume = elements[4];
-        var sz_current_turnover = elements[5];
+        var sz_current_volume = sz_elements[4];
+        var sz_current_turnover = sz_elements[5];
+        // sz_current_turnover = (parseFloat(sz_current_turnover)/10000).toFixed(2);
+        document.getElementById('sz_name').innerHTML = sz_name;
         document.getElementById('sz_current_price').innerHTML = sz_current_price;
         document.getElementById('sz_current_ups_downs').innerHTML = sz_current_ups_downs;
         document.getElementById('sz_current_percent').innerHTML = sz_current_percent;
         document.getElementById('sz_current_volume').innerHTML = sz_current_volume;
         document.getElementById('sz_current_turnover').innerHTML = sz_current_turnover;
+    </script>
+    <script type="text/javascript">
+        // 深证
+        var cy_elements = hq_str_s_sz399006.split(",");
+        var cy_name = sh_elements[0];
+        var cy_current_price = parseFloat(cy_elements[1]).toFixed(2);
+        var cy_ups_downs = parseFloat(cy_elements[2]).toFixed(2);
+        var cy_current_percent;
+        var cy_current_ups_downs;
+        if (cy_ups_downs >= 0)  {
+            cy_current_ups_downs = '+' + cy_ups_downs;
+            cy_current_percent = '+' + cy_elements[3] + '%';
+        }else {
+            cy_current_ups_downs = '-' + cy_ups_downs;
+            cy_current_percent = '-' + cy_elements[3] + '%';
+        }
+        var cy_current_volume = cy_elements[4];
+        var cy_current_turnover = cy_elements[5];
+        // cy_current_turnover = (parseFloat(cy_current_turnover)/10000).toFixed(2);
+        document.getElementById('cy_name').innerHTML = cy_name;
+        document.getElementById('cy_current_price').innerHTML = cy_current_price;
+        document.getElementById('cy_current_ups_downs').innerHTML = cy_current_ups_downs;
+        document.getElementById('cy_current_percent').innerHTML = cy_current_percent;
+        document.getElementById('cy_current_volume').innerHTML = cy_current_volume;
+        document.getElementById('cy_current_turnover').innerHTML = cy_current_turnover;
     </script>
 </body>
 </html>
