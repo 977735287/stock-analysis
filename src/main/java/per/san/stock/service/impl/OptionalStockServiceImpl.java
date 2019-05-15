@@ -17,6 +17,7 @@ import per.san.stock.service.IOptionalStockService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Map;
  */
 @Service
 public class OptionalStockServiceImpl implements IOptionalStockService {
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     @Autowired
     OptionalStockMapper optionalStockMapper;
@@ -101,6 +104,7 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
         Map<Integer, List<Short>> blueIndexMap = Maps.newHashMap();
         int i = 1;
         String url = "http://q.stock.sohu.com/hisHq";
+        int row = 1;
         for (OptionalStock optionalStock : optionalStocks) {
             List<Object> header = Lists.newArrayList();
             List<Object> line = Lists.newArrayList();
@@ -112,6 +116,9 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
             Map<String, Object> map = gson.fromJson(result, new TypeToken<Map<String, Object>>(){}.getType());
             List<List<String>> lists = (List<List<String>>) map.get("hq");
             int k = 1;
+            List<Short> redIndexList = Lists.newArrayList();
+            List<Short> blueIndexList = Lists.newArrayList();
+            int j = 1;
             for (List<String> list : lists) {
                 if (i == 1) {
                     header.add("");
@@ -120,23 +127,42 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
                     header.add("");
                 }
                 if (k == 1) {
-                    line.add(optionalStock.getCode());
+                    String name = optionalStock.getCode();
+                    if (optionalStock.getName() != null) {
+                        name += "(" + optionalStock.getName() + ")";
+                    }
+                    line.add(name);
                 }
                 line.add(list.get(2));
                 line.add(list.get(4));
-                line.add(list.get(3));
+                String downPrice = list.get(3);
+                line.add(downPrice);
+                if (downPrice != null && Double.parseDouble(downPrice) < 0) {
+                    redIndexList.add((short) j);
+                    redIndexList.add((short) (j + 1));
+                    redIndexList.add((short) (j + 2));
+                }
+                if (downPrice != null && Double.parseDouble(downPrice) > 0) {
+                    blueIndexList.add((short) j);
+                    blueIndexList.add((short) (j + 1));
+                    blueIndexList.add((short) (j + 2));
+                }
                 line.add("    ");
                 k = 0;
+                j += 4;
             }
             if (i == 1) {
                 data.add(header);
             }
+            redIndexMap.put(row, redIndexList);
+            blueIndexMap.put(row, blueIndexList);
             i = 0;
+            row ++;
             data.add(line);
         }
         dataMap.put("data", data);
         response.addHeader("Content-Disposition", "filename=down.xlsx");
 
-        ExcelUtils.writeExcel(dataMap, Lists.newArrayList()).write(response.getOutputStream());
+        ExcelUtils.writeExcel(dataMap, redIndexMap, blueIndexMap).write(response.getOutputStream());
     }
 }

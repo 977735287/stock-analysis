@@ -4,10 +4,12 @@ spring:
   application:
     name: demo-01
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=yes
+    url: jdbc:mysql://127.0.0.1:3306/stock_analysis?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=yes
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false
 
 mybatis:
   mapper-locations: classpath*:/mapper/*/*.xml

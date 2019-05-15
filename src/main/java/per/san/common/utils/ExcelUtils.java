@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -344,17 +345,24 @@ public class ExcelUtils {
         return str.substring(0, length);
     }
 
-    public static void main(String[] args) throws IOException {
-        File file1 = new File("C:\\Users\\97773\\Desktop\\test.xlsx");
-        Map<String, List<List<Object>>> dataMap = readExcel(file1.getName().substring(file1.getName().lastIndexOf(".")),
-                new FileInputStream(file1.getAbsolutePath()), 2, (short) 2);
-        File file = new File("C:\\Users\\97773\\Desktop\\test2.xlsx");
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        OutputStream outputStream = new FileOutputStream(file);
-//        writeExcel(dataMap, 1, 2, (short) 2).write(outputStream);
-        outputStream.close();
-        System.out.println(dataMap);
-    }
+//    public static void main(String[] args) throws IOException {
+////        File file1 = new File("C:\\Users\\97773\\Desktop\\test.xlsx");
+////        Map<String, List<List<Object>>> dataMap = readExcel(file1.getName().substring(file1.getName().lastIndexOf(".")),
+////                new FileInputStream(file1.getAbsolutePath()), 2, (short) 2);
+////        File file = new File("C:\\Users\\97773\\Desktop\\test2.xlsx");
+////        if (!file.exists()) {
+////            file.createNewFile();
+////        }
+////        OutputStream outputStream = new FileOutputStream(file);
+////        writeExcel(dataMap, null).write(outputStream);
+////        outputStream.close();
+////        System.out.println(dataMap);
+//        String a = "-0.20";
+//        Double b = Double.parseDouble(a);
+//        DecimalFormat df = new DecimalFormat("0.00");
+//        System.out.println(df.format(b));
+//        if (b < 0) {
+//            System.out.println(df.format(b) + "  < 0");
+//        }
+//    }
 }
