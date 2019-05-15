@@ -1,9 +1,5 @@
 package ${packageName}.domain;
 
-<#if packageName != "per.san.sys">
-import per.san.sys.domain.BaseDomain;
-
-</#if>
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -20,7 +16,7 @@ import java.util.Date;
  * lastUpdateDate: ${date?string('yyyy-MM-dd hh:mm')}
  */
 @Table(name="${table.tableName}")
-public class ${table.className} extends BaseDomain {
+public class ${table.className} {
 
     /**
     *${table.pk.comments!}

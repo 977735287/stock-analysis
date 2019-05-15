@@ -4,6 +4,9 @@ import com.google.common.collect.Sets;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -22,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND;
 
 /**
  * description: excel工具类
@@ -118,6 +123,44 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return dataMap;
+    }
+
+    /**
+     * description: 写excel文件
+     *
+     * @param dataMap 写入的数据
+     * @return 文件的输出流
+     */
+    public static Workbook writeExcel(Map<String, List<List<Object>>> dataMap,
+                                      Map<Integer, List<Short>> redIndexMap,
+                                      Map<Integer, List<Short>> blueIndexMap) {
+        Workbook wb = writeExcel(dataMap, null, EXCEL_XLSX);
+        String sheetName = dataMap.keySet().iterator().next();
+        CellStyle redStyle = wb.createCellStyle();
+        CellStyle blueStyle = wb.createCellStyle();
+        Sheet st = wb.getSheet(sheetName);
+        Font redFont = wb.createFont();
+        Font blueFont = wb.createFont();
+        redFont.setColor(Font.COLOR_RED);
+        redStyle.setFont(redFont);
+        blueFont.setColor(IndexedColors.BLUE.index);
+        blueStyle.setFont(blueFont);
+        setFontStyle(redIndexMap, redStyle, st);
+        setFontStyle(blueIndexMap, blueStyle, st);
+        return wb;
+    }
+
+    private static void setFontStyle(Map<Integer, List<Short>> redIndexMap, CellStyle redStyle, Sheet st) {
+        for (Integer redIndex : redIndexMap.keySet()) {
+            Row row = st.getRow(redIndex);
+            for (Short columnIndex : redIndexMap.get(redIndex)) {
+                Cell cell = row.getCell(columnIndex);
+                if (cell == null) {
+                    cell = row.createCell(columnIndex);
+                }
+                cell.setCellStyle(redStyle);
+            }
+        }
     }
 
     /**

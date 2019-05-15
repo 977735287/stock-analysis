@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="per.san.stock.mapper.OptionalStockMapper" >
+
+    <insert id="insertList">
+        insert into optional_stock (code, name, area)
+        values
+        <foreach collection="optionalStocks" item="item" separator=",">
+            (#{item.code}, #{item.name}, #{item.area})
+        </foreach>
+    </insert>
+
+    <insert id="insertCodeList">
+        insert into optional_stock (code)
+        values
+        <foreach collection="codes" item="item" separator=",">
+            (#{item})
+        </foreach>
+    </insert>
+
+    <delete id="deleteBatch">
+        delete from optional_stock
+        <where>
+            id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+</mapper>
