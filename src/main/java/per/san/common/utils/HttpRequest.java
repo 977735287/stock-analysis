@@ -33,14 +33,17 @@ public class HttpRequest {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String obj = null;
         try {
-            HttpUriRequest httpget = new HttpGet(URL + "?" + param);
+            if (param != null && !param.trim().isEmpty()) {
+                URL +=  "?" + param;
+            }
+            HttpUriRequest httpget = new HttpGet(URL);
             // 执行get请求.
             CloseableHttpResponse response = httpclient.execute(httpget);
             try {
                 // 获取响应实体
                 HttpEntity entity = response.getEntity();
                 // 打印响应状态
-                System.out.println(response.getStatusLine());
+//                System.out.println(response.getStatusLine());
                 if (entity != null) {
                     obj = EntityUtils.toString(entity);
                 }

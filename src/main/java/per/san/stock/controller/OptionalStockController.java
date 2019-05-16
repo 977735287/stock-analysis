@@ -22,6 +22,7 @@ import per.san.stock.service.IOptionalStockService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description:
@@ -113,5 +114,11 @@ public class OptionalStockController {
             @RequestParam(value = "start") String start,
             @RequestParam(value = "end") String end) throws IOException {
         iOptionalStockService.downloadHistoryInfo(response, start, end);
+    }
+
+    @ApiOperation(value = "大盘指数")
+    @GetMapping("/stock/market")
+    public ResponseEntity<Map<String, List<String>>> getMarketIndex() {
+        return new ResponseEntity<>(iOptionalStockService.getMarketIndex(), HttpStatus.OK);
     }
 }

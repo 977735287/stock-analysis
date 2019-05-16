@@ -165,4 +165,21 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
 
         ExcelUtils.writeExcel(dataMap, redIndexMap, blueIndexMap).write(response.getOutputStream());
     }
+
+    @Override
+    public Map<String, List<String>> getMarketIndex() {
+        String url = "http://hq.sinajs.cn/list=s_sh000001,s_sz399001,s_sz399006";
+        String sh_res = HttpRequest.get(null, url);
+        String sh = sh_res.substring(sh_res.indexOf("var hq_str_s_sh000001"), sh_res.indexOf("var hq_str_s_sz399001"));
+        String sz = sh_res.substring(sh_res.indexOf("var hq_str_s_sz399001"), sh_res.indexOf("var hq_str_s_sz399006"));
+        String cy = sh_res.substring(sh_res.indexOf("var hq_str_s_sz399006"));
+        sh = sh.substring(sh.indexOf("\"") + 1, sh.lastIndexOf("\""));
+        sz = sz.substring(sz.indexOf("\"") + 1, sz.lastIndexOf("\""));
+        cy = cy.substring(cy.indexOf("\"") + 1, cy.lastIndexOf("\""));
+        Map<String, List<String>> marketMap = Maps.newHashMap();
+        marketMap.put("sh", Lists.newArrayList(sh.split(",")));
+        marketMap.put("sz", Lists.newArrayList(sz.split(",")));
+        marketMap.put("cy", Lists.newArrayList(cy.split(",")));
+        return marketMap;
+    }
 }

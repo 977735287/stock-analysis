@@ -7,6 +7,7 @@ import per.san.stock.domain.OptionalStock;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 
@@ -90,5 +91,11 @@ public interface IOptionalStockService {
     * @return 数据对象
     */
     void downloadHistoryInfo(HttpServletResponse response, String start, String end) throws IOException;
+
+    /**
+    * description:
+    * @return 数据
+    */
+    Map<String, List<String>> getMarketIndex();
 
 }
