@@ -213,7 +213,7 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 axisLabel:{
                     interval:29,
                 },
-                axisTick: {onGap:false},
+                axisTick: {show:false},
                 splitLine: {show:false},
                 axisLine:{show:false},
                 data : x_data
@@ -227,6 +227,9 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 interval:y_interval1,
                 min: minPrice,
                 max: maxPrice,
+                axisTick:{       //y轴刻度线
+                    show:false
+                },
                 axisLabel: {
                     formatter: function (v) {
                         return v.toFixed(2);
@@ -246,6 +249,9 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 interval:y_interval2,
                 min: minPercent,
                 max: maxPercent,
+                axisTick:{       //y轴刻度线
+                    show:false
+                },
                 axisLabel: {
                     formatter: function (v) {
                         var rtn = (v * 100).toFixed(2);
@@ -274,6 +280,13 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 yAxisIndex: 0,
                 symbol: 'none',
                 data:y_data1,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            shadowColor : '#1e90ff'
+                        }
+                    }
+                },
                 markPoint : {
                     symbol: 'emptyPin',
                     itemStyle : {
@@ -316,6 +329,13 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 type:'line',
                 yAxisIndex: 1,
                 symbol: 'none',
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            shadowColor : '#1e90ff'
+                        }
+                    }
+                },
                 data:y_data2
             }
         ]
