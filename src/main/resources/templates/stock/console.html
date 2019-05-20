@@ -32,7 +32,7 @@
                         </div>
                         <div class="chart-footer">
                             <div class="field">
-                                <div class="field-left">成交量(手)</div>
+                                <div class="field-left">成交量&nbsp;&nbsp;&nbsp;(手)</div>
                                 <span class="field-right" id="sh_current_volume">0</span>
                             </div>
                             <div class="field">
@@ -64,7 +64,7 @@
                         </div>
                         <div class="chart-footer">
                             <div class="field">
-                                <div class="field-left">成交量(手)</div>
+                                <div class="field-left">成交量&nbsp;&nbsp;&nbsp;(手)</div>
                                 <span class="field-right" id="sz_current_volume">0</span>
                             </div>
                             <div class="field">
@@ -96,7 +96,7 @@
                         </div>
                         <div class="chart-footer">
                             <div class="field">
-                                <div class="field-left">成交量(手)</div>
+                                <div class="field-left">成交量&nbsp;&nbsp;&nbsp;(手)</div>
                                 <span class="field-right" id="cy_current_volume">0</span>
                             </div>
                             <div class="field">
@@ -108,15 +108,28 @@
                 </div>
             </div>
             <div class="layui-col-sm12 layui-col-md12">
-                <div class="layui-card">
+                <div class="layui-card" style="margin-top: -6px">
                     <div class="layui-tab layui-tab-brief">
                         <ul class="layui-tab-title">
-                            <li class="layui-this">新增数</li>
-                            <li>活跃度</li>
+                            <li class="layui-this">分时</li>
+                            <li>日k</li>
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
-                                dddd
+                                <div class="layui-container">
+                                    <div class="layui-row">
+                                        <div class="layui-col-md2"></div>
+                                        <div class="layui-col-md8">
+                                            <div id="k_line_main" style="width: 1000px;height: 300px;margin-top: -20px;"></div>
+                                            <div style="text-align:right; margin-top: -18px">
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('000001','sh')">上证指数</button>
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('399001','sz')">深成指数</button>
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('399006','sz')">创业板指</button>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md2"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="layui-tab-item">
                                 ddd
@@ -132,10 +145,8 @@
     <script type="text/javascript" src="http://hq.sinajs.cn/list=s_sz399006" charset="gb2312"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script th:src="@{public/stock/layui.all.js}"></script>
+    <script th:src="@{public/stock/echarts.min.js}"></script>
     <script th:src="@{public/stock/js/console.js}"></script>
-    <script>
-     var element = layui.element;
-    </script>
     <script type="text/javascript">
 
     </script>

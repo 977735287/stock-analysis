@@ -141,7 +141,7 @@ html, body , .app-container{
 
 .app-container .layui-tab-content{
     position: absolute;
-    top: 40px;
+    top: 36px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -153,6 +153,7 @@ html, body , .app-container{
 .app-container .layui-tab-item > iframe{
     width: 100%;
     height: 100%;
+    text-align: center;
 }
 .custom-header{
     height: 50px;

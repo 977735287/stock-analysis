@@ -117,8 +117,14 @@ public class OptionalStockController {
     }
 
     @ApiOperation(value = "大盘指数")
-    @GetMapping("/stock/market")
+    @GetMapping("/market")
     public ResponseEntity<Map<String, List<String>>> getMarketIndex() {
         return new ResponseEntity<>(iOptionalStockService.getMarketIndex(), HttpStatus.OK);
+    }
+    @ApiOperation(value = "分时数据")
+    @GetMapping("/min/data/{type}/{code}")
+    public ResponseEntity<Map<String, Object>> getMinuteData(@PathVariable("code") String code,
+                                                             @PathVariable("type") String type) {
+        return new ResponseEntity<>(iOptionalStockService.getMinuteData(code, type), HttpStatus.OK);
     }
 }

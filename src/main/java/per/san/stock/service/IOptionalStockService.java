@@ -98,4 +98,10 @@ public interface IOptionalStockService {
     */
     Map<String, List<String>> getMarketIndex();
 
+    /**
+    * description:
+    * @return 数据
+    */
+    Map<String, Object> getMinuteData(String code, String type);
+
 }

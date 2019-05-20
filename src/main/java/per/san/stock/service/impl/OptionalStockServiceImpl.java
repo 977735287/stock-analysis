@@ -34,6 +34,9 @@ import java.util.Map;
 public class OptionalStockServiceImpl implements IOptionalStockService {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    private static final String historyInfoUrl = "http://q.stock.sohu.com/hisHq";
+    private static final String marketIndexUrl = "http://hq.sinajs.cn/list=s_sh000001,s_sz399001,s_sz399006";
+    private static final String minuteDataUrl = "http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js";
 
     @Autowired
     OptionalStockMapper optionalStockMapper;
@@ -103,14 +106,13 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
         Map<Integer, List<Short>> redIndexMap = Maps.newHashMap();
         Map<Integer, List<Short>> blueIndexMap = Maps.newHashMap();
         int i = 1;
-        String url = "http://q.stock.sohu.com/hisHq";
         int row = 1;
         for (OptionalStock optionalStock : optionalStocks) {
             List<Object> header = Lists.newArrayList();
             List<Object> line = Lists.newArrayList();
             String param = "code=cn_" + optionalStock.getCode()
                     + "&start=" + start + "&end=" + end + "&stat=0&order=D&period=d&callback=&rt=jsonp";
-            String result = HttpRequest.get(param, url);
+            String result = HttpRequest.get(param, historyInfoUrl);
             result = result.substring(2, result.length() - 3);
             Gson gson = new Gson();
             Map<String, Object> map = gson.fromJson(result, new TypeToken<Map<String, Object>>(){}.getType());
@@ -162,14 +164,12 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
         }
         dataMap.put("data", data);
         response.addHeader("Content-Disposition", "filename=down.xlsx");
-
         ExcelUtils.writeExcel(dataMap, redIndexMap, blueIndexMap).write(response.getOutputStream());
     }
 
     @Override
     public Map<String, List<String>> getMarketIndex() {
-        String url = "http://hq.sinajs.cn/list=s_sh000001,s_sz399001,s_sz399006";
-        String sh_res = HttpRequest.get(null, url);
+        String sh_res = HttpRequest.get(null, marketIndexUrl);
         String sh = sh_res.substring(sh_res.indexOf("var hq_str_s_sh000001"), sh_res.indexOf("var hq_str_s_sz399001"));
         String sz = sh_res.substring(sh_res.indexOf("var hq_str_s_sz399001"), sh_res.indexOf("var hq_str_s_sz399006"));
         String cy = sh_res.substring(sh_res.indexOf("var hq_str_s_sz399006"));
@@ -181,5 +181,21 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
         marketMap.put("sz", Lists.newArrayList(sz.split(",")));
         marketMap.put("cy", Lists.newArrayList(cy.split(",")));
         return marketMap;
+    }
+
+    @Override
+    public Map<String, Object> getMinuteData(String code, String type) {
+        String param = "id=" + code;
+        if ("sh".equals(type)) {
+            param += "1";
+        }else {
+            param += "2";
+        }
+        param += "&TYPE=r&rtntype=5&isCR=false";
+        String result = HttpRequest.get(param, minuteDataUrl);
+        result = result.substring(1, result.length() - 1);
+        Gson gson = new Gson();
+        Map<String, Object> map = gson.fromJson(result, new TypeToken<Map<String, Object>>(){}.getType());
+        return map;
     }
 }
