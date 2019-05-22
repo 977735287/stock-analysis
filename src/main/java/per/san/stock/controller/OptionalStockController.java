@@ -106,25 +106,4 @@ public class OptionalStockController {
             @PathVariable("id") Long id) {
         return new ResponseEntity<>(iOptionalStockService.queryById(id), HttpStatus.OK);
     }
-
-    @ApiOperation(value = "download")
-    @GetMapping("/history/download")
-    public void downloadHistoryInfo(
-            HttpServletResponse response,
-            @RequestParam(value = "start") String start,
-            @RequestParam(value = "end") String end) throws IOException {
-        iOptionalStockService.downloadHistoryInfo(response, start, end);
-    }
-
-    @ApiOperation(value = "大盘指数")
-    @GetMapping("/market")
-    public ResponseEntity<Map<String, List<String>>> getMarketIndex() {
-        return new ResponseEntity<>(iOptionalStockService.getMarketIndex(), HttpStatus.OK);
-    }
-    @ApiOperation(value = "分时数据")
-    @GetMapping("/min/data/{type}/{code}")
-    public ResponseEntity<Map<String, Object>> getMinuteData(@PathVariable("code") String code,
-                                                             @PathVariable("type") String type) {
-        return new ResponseEntity<>(iOptionalStockService.getMinuteData(code, type), HttpStatus.OK);
-    }
 }

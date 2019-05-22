@@ -1,5 +1,5 @@
-var url='/v1/optional/stock/market';
-var minute_url='/v1/optional/stock/min/data';
+var url='/v1/stock/data/market';
+var minute_url='/v1/stock/data/min/data';
 
 // 上证
 function getSh(sh_elements) {
@@ -145,6 +145,8 @@ var maxPercent = 0;
 
 function getStockData(x_data, code, type) {
     $.get(minute_url + "/" + type + "/" + code, function(result,status){
+        var stock_name = result.name + "[" + result.code + "]";
+        document.getElementById('stock_name').innerHTML = stock_name;
         var yc = parseFloat(result.info.yc);
         var h = parseFloat(result.info.h);
         var l = parseFloat(result.info.l);
@@ -158,10 +160,9 @@ function getStockData(x_data, code, type) {
         if (l > yc) {
             lowChange = l - yc;
         } else {
-            highChange = yc - l;
+            lowChange = yc - l;
         }
         var y_interval = 0;
-        var y_interva2 = 0;
         if (highChange > lowChange) {
             maxPrice = h;
             minPrice = (yc - highChange).toFixed(2);
@@ -175,7 +176,7 @@ function getStockData(x_data, code, type) {
             maxPercent = lowChange / yc;
             minPercent = - maxPercent;
         }
-        y_interva2 = maxPercent / 3;
+        var y_interva2 = maxPercent / 3;
         var data1 = [];
         var data2 = [];
         for (var i = 0; i < result.data.length; i++) {
@@ -187,7 +188,6 @@ function getStockData(x_data, code, type) {
 }
 
 function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, yc) {
-    console.info(y_data2);
     var kLineChart = echarts.init(document.getElementById('k_line_main'));
     var option = {
         tooltip : {
@@ -201,6 +201,12 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 }
             },
             formatter: function (params) {
+                var stock_date = params[0].axisValue;
+                if (params[0].axisValue == '11:30/13:00') {
+                    stock_date = '11:30';
+                }
+                document.getElementById('stock_date').innerHTML = stock_date;
+                console.info(params);
                 var res = "价格：" + params[0].value;
                 res += "<br/>涨幅：" + (params[1].value * 100).toFixed(2) + "%";
                 return res;
@@ -293,7 +299,7 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                         normal : {
                             color:'#1e90ff',
                             label : {
-                                show:true,
+                                show:false,
                                 position:'top',
                                 formatter: function (param) {
                                     return param.value.toFixed(2);

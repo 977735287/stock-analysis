@@ -120,7 +120,14 @@
                                     <div class="layui-row">
                                         <div class="layui-col-md2"></div>
                                         <div class="layui-col-md8">
-                                            <div id="k_line_main" style="width: 1000px;height: 300px;margin-top: -20px;"></div>
+                                            <div style="text-align: center; font-size: 12px; margin-top: 16px;">
+                                                <span id="stock_name"></span>&nbsp;&nbsp;
+                                                <span id="stock_date"></span>&nbsp;&nbsp;
+                                                <span id="stock_price"></span>&nbsp;&nbsp;
+                                                <span id="stock_percent"></span>&nbsp;&nbsp;
+                                                <span id="stock_volume"></span>&nbsp;&nbsp;
+                                            </div>
+                                            <div id="k_line_main" style="width: 1000px;height: 300px;margin-top: -40px;"></div>
                                             <div style="text-align:right; margin-top: -18px">
                                                 <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('000001','sh')">上证指数</button>
                                                 <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('399001','sz')">深成指数</button>
@@ -132,7 +139,20 @@
                                 </div>
                             </div>
                             <div class="layui-tab-item">
-                                ddd
+                                <div class="layui-container">
+                                    <div class="layui-row">
+                                        <div class="layui-col-md2"></div>
+                                        <div class="layui-col-md8">
+                                            <div id="date_k_line_main" style="width: 1000px;height: 300px;margin-top: -20px;"></div>
+                                            <div style="text-align:right; margin-top: -18px">
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('000001','sh')">上证指数</button>
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('399001','sz')">深成指数</button>
+                                                <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="settingMinuteLine('399006','sz')">创业板指</button>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md2"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

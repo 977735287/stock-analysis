@@ -83,25 +83,4 @@ public interface IOptionalStockService {
     */
     OptionalStock queryById(Long id);
 
-    /**
-    * description:
-    * @param response
-    * @param start
-    * @param end
-    * @return 数据对象
-    */
-    void downloadHistoryInfo(HttpServletResponse response, String start, String end) throws IOException;
-
-    /**
-    * description:
-    * @return 数据
-    */
-    Map<String, List<String>> getMarketIndex();
-
-    /**
-    * description:
-    * @return 数据
-    */
-    Map<String, Object> getMinuteData(String code, String type);
-
 }
