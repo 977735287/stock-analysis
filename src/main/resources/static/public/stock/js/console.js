@@ -146,7 +146,15 @@ var maxPercent = 0;
 function getStockData(x_data, code, type) {
     $.get(minute_url + "/" + type + "/" + code, function(result,status){
         var stock_name = result.name + "[" + result.code + "]";
+        var date_time = result.info.time.substring(0, 11);
+        var yc = parseFloat(result.info.yc);
         document.getElementById('stock_name').innerHTML = stock_name;
+        var stock_date = date_time + "09:30";
+        var stock_price = "价格：" + parseFloat(result.info.o).toFixed(2);
+        var stock_percent = "涨幅：" + (((parseFloat(result.info.o) - yc) / yc) * 100).toFixed(2) + "%";
+        document.getElementById('stock_date').innerHTML = stock_date;
+        document.getElementById('stock_price').innerHTML = stock_price;
+        document.getElementById('stock_percent').innerHTML = stock_percent;
         var yc = parseFloat(result.info.yc);
         var h = parseFloat(result.info.h);
         var l = parseFloat(result.info.l);
@@ -183,11 +191,11 @@ function getStockData(x_data, code, type) {
             data1[i] = parseFloat(result.data[i].split(",")[1]).toFixed(2);
             data2[i] = (parseFloat(result.data[i].split(",")[1]) - yc) / yc;
         }
-        settingMinuteData(x_data, data1, data2, y_interval, y_interva2, yc);
+        settingMinuteData(x_data, data1, data2, y_interval, y_interva2, yc, date_time);
     });
 }
 
-function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, yc) {
+function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, yc, date_time) {
     var kLineChart = echarts.init(document.getElementById('k_line_main'));
     var option = {
         tooltip : {
@@ -205,8 +213,11 @@ function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, y
                 if (params[0].axisValue == '11:30/13:00') {
                     stock_date = '11:30';
                 }
-                document.getElementById('stock_date').innerHTML = stock_date;
-                console.info(params);
+                var stock_price = "价格：" + params[0].value;
+                var stock_percent = "涨幅：" + (params[1].value * 100).toFixed(2) + "%";
+                document.getElementById('stock_date').innerHTML = date_time + stock_date;
+                document.getElementById('stock_price').innerHTML = stock_price;
+                document.getElementById('stock_percent').innerHTML = stock_percent;
                 var res = "价格：" + params[0].value;
                 res += "<br/>涨幅：" + (params[1].value * 100).toFixed(2) + "%";
                 return res;
