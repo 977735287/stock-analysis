@@ -37,6 +37,11 @@
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>2.0.0</version>
         </dependency>
+        <!-- springboot2.0已经将oauth2.0与security整合在一起 -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-security</artifactId>-->
+        <!--</dependency>-->
 
         <!--mysql驱动-->
         <dependency>

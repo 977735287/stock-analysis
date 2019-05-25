@@ -62,6 +62,13 @@ public interface IOptionalStockService {
     Integer update(OptionalStock optionalStock);
 
     /**
+    * description: 更新
+    * @param optionalStockList 更新的信息
+    * @return 更新成功的条数
+    */
+    Integer updateBatch(List<OptionalStock> optionalStockList);
+
+    /**
     * description: 分页查询
     * @param pageRequest 分页查询参数
     * @param optionalStock 分页查询条件

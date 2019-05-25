@@ -75,6 +75,12 @@ public class OptionalStockController {
         return new ResponseEntity<>(iOptionalStockService.update(optionalStock), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "批量更新")
+    @PutMapping("/update/batch")
+    public ResponseEntity<Integer> update(@RequestBody List<OptionalStock> optionalStockList) {
+        return new ResponseEntity<>(iOptionalStockService.updateBatch(optionalStockList), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "分页查询")
     @GetMapping("/page")
     public ResponseEntity<PageInfo<OptionalStock>> pageQuery(

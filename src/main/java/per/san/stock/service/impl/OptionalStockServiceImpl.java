@@ -84,6 +84,12 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
     }
 
     @Override
+    public Integer updateBatch(List<OptionalStock> optionalStockList) {
+        optionalStockList.forEach(item -> optionalStockMapper.updateByPrimaryKeySelective(item));
+        return optionalStockList.size();
+    }
+
+    @Override
     public PageInfo<OptionalStock> pageQuery(PageRequest pageRequest, OptionalStock optionalStock) {
         return PageHelper.doPage(pageRequest, () -> optionalStockMapper.select(optionalStock));
     }

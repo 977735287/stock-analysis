@@ -23,4 +23,9 @@ public class IndexController {
     public String console() {
         return "stock/console";
     }
+
+    @GetMapping("/optional_stock")
+    public String optionalStock() {
+        return "stock/optional_stock";
+    }
 }
