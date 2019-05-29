@@ -32,7 +32,7 @@ public class UpDownPercentServiceImpl implements IUpDownPercentService {
 
     private static final String url = "http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData";
     private static final String paramDown = "page=1&num=20&sort=changepercent&asc=1&node=hs_a&symbol=&_s_r_a=setlen";
-    private static final String paramUp = "page=1&num=20&sort=changepercent&asc=0&node=hs_a&symbol=&_s_r_a=setlen";
+    private static final String paramUp = "page=1&num=100&sort=changepercent&asc=0&node=hs_a&symbol=&_s_r_a=setlen";
 
     @Autowired
     UpDownPercentMapper upDownPercentMapper;
