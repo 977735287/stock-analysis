@@ -16,7 +16,7 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index() {
-        return "index";
+        return "stock/index";
     }
 
     @GetMapping("/console")
@@ -27,5 +27,10 @@ public class IndexController {
     @GetMapping("/optional_stock")
     public String optionalStock() {
         return "stock/optional_stock";
+    }
+
+    @GetMapping("/app")
+    public String app() {
+        return "stock/views/app";
     }
 }

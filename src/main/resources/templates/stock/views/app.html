@@ -1,0 +1,681 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" th:href="@{public/stock/css/default.css}" id="app">
+<style scoped>
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md8">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md4">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md6">
+                                            <div class="chart-header">
+                                                <div class="meta">
+                                                    <span id="sh_name">上证指数</span>
+                                                </div>
+                                            </div>
+                                            <div class="chart-body stock-data" id="stock_data_sh">
+                                                <div class="total">
+                                                    <span id="sh_current_price">0.00</span>
+                                                </div>
+                                                <div class="up-percent">
+                                                    <span id="sh_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                                    <span id="sh_current_percent">+0.00%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md6">
+                                            <div class="field">
+                                                <div class="field-left">成交量(手)</div>
+                                                <div class="field-right">
+                                                    <span id="sh_current_volume">0</span>
+                                                </div>
+                                                <div class="field-left">成交额(万元)</div>
+                                                <div class="field-right">
+                                                    <span id="sh_current_turnover">0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md6">
+                                            <div class="chart-header">
+                                                <div class="meta">
+                                                    <span id="sz_name">深圳成指</span>
+                                                </div>
+                                            </div>
+                                            <div class="chart-body stock-data" id="stock_data_sz">
+                                                <div class="total">
+                                                    <span id="sz_current_price">0.00</span>
+                                                </div>
+                                                <div class="up-percent">
+                                                    <span id="sz_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                                    <span id="sz_current_percent">+0.00%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md6">
+                                            <div class="field">
+                                                <div class="field-left">成交量(手)</div>
+                                                <div class="field-right">
+                                                    <span id="sz_current_volume">0</span>
+                                                </div>
+                                                <div class="field-left">成交额(万元)</div>
+                                                <div class="field-right">
+                                                    <span id="sz_current_turnover">0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md6">
+                                            <div class="chart-header">
+                                                <div class="meta">
+                                                    <span id="cy_name">创业板指</span>
+                                                </div>
+                                            </div>
+                                            <div class="chart-body stock-data" id="stock_data_cy">
+                                                <div class="total">
+                                                    <span id="cy_current_price">0.00</span>
+                                                </div>
+                                                <div class="up-percent">
+                                                    <span id="cy_current_ups_downs">+0.00</span>&nbsp;&nbsp;
+                                                    <span id="cy_current_percent">+0.00%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md6">
+                                            <div class="field">
+                                                <div class="field-left">成交量(手)</div>
+                                                <div class="field-right">
+                                                    <span id="cy_current_volume">0</span>
+                                                </div>
+                                                <div class="field-left">成交额(万元)</div>
+                                                <div class="field-right">
+                                                    <span id="cy_current_turnover">0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div style="text-align: left; font-size: 12px; margin-top: 6px; margin-left: 85px">
+                                        <span id="stock_name"></span>&nbsp;&nbsp;
+                                        <span id="stock_date"></span>&nbsp;&nbsp;
+                                        <span id="stock_price"></span>&nbsp;&nbsp;
+                                        <span id="stock_percent"></span>&nbsp;&nbsp;
+                                        <span id="stock_volume"></span>&nbsp;&nbsp;
+                                    </div>
+                                    <div id="k_line_main" style="width: 100%;height: 300px;margin-top: -50px;"></div>
+                                    <div style="text-align:center; margin-top: -18px">
+                                        <button class="layui-btn layui-btn-primary layui-btn-xs"
+                                                onclick="settingMinuteLine('000001','sh')">上证指数
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-xs"
+                                                onclick="settingMinuteLine('399001','sz')">深成指数
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-xs"
+                                                onclick="settingMinuteLine('399006','sz')">创业板指
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header">ECharts</div>
+                                <div class="layui-card-body">
+                                    <div id="container1" style="height:350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header">ECharts</div>
+                                <div class="layui-card-body">
+                                    <div id="main" style="height:350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header">ECharts</div>
+                                <div class="layui-card-body">
+                                    <div id="main1" style="height:350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header">数据统计</div>
+                                <div class="layui-card-body">
+                                    <table id="demo_hash" lay-filter="test_hash"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header">昨日涨停股</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table" lay-skin="nob" lay-size="">
+                                        <colgroup>
+                                            <col width="70">
+                                            <col width="20">
+                                            <col width="20">
+                                            <col width="20">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>股票</th>
+                                            <th>最新</th>
+                                            <th>涨幅</th>
+                                            <th>涨跌</th>
+                                        </tr>
+                                        </thead>
+                                        <!--<tbody>-->
+                                        <!--<tr>-->
+                                        <!--<td width="70">中国外运</td>-->
+                                        <!--<td width="20">125.25</td>-->
+                                        <!--<td width="20">15.25%</td>-->
+                                        <!--<td width="20">123.21</td>-->
+                                        <!--</tr>-->
+                                        <!--</tbody>-->
+                                    </table>
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md4" style="text-align: left">
+                                            <div style="font-size: 13px"><span>中国外运&nbsp;(001254)</span></div>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                            <span>125.25</span>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                            <span>15.25%</span>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                            <span>125.25</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header">昨日涨停股</div>
+                                <div class="layui-card-body">
+                                    <table lay-filter="parse-table-demo">
+                                        <thead>
+                                        <tr>
+                                            <th width="120">股票</th>
+                                            <th width="80">最新</th>
+                                            <th width="80">涨幅</th>
+                                            <th width="80">涨跌</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>001856&nbsp;中国外运</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                            <td style="color: #ff0014">15.25%</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>001856&nbsp;中国外运</td>
+                                            <td style="color: #006400">125.25</td>
+                                            <td style="color: #006400">15.25%</td>
+                                            <td style="color: #006400">125.25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>001856&nbsp;中国外运</td>
+                                            <td style="color: #006400">125.25</td>
+                                            <td style="color: #006400">15.25%</td>
+                                            <td style="color: #006400">125.25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>001856&nbsp;中国外运</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                            <td style="color: #ff0014">15.25%</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>001856&nbsp;中国外运</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                            <td style="color: #ff0014">15.25%</td>
+                                            <td style="color: #ff0014">125.25</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{public/stock/js/default.js}"></script>
+<script>
+    layui.config({
+        base: '/src/js/'
+    }).use(['jquery', 'mockjs', 'table'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            table = layui.table;
+        var url = '/v1/stock/data/market';
+        var minute_url = '/v1/stock/data/min/data';
+
+        // 上证
+        function getSh(sh_elements) {
+            // var sh_elements = hq_str_s_sh000001.split(",");
+            var sh_name = sh_elements[0];
+            var sh_current_price = parseFloat(sh_elements[1]).toFixed(2);
+            var sh_ups_downs = parseFloat(sh_elements[2]).toFixed(2);
+            var sh_current_percent;
+            var sh_current_ups_downs;
+            if (sh_ups_downs >= 0) {
+                sh_current_ups_downs = '+' + sh_ups_downs;
+                sh_current_percent = '+' + sh_elements[3] + '%';
+                $("#stock_data_sh").css('color', 'rgb(255, 0, 20)');
+            } else {
+                sh_current_ups_downs = sh_ups_downs;
+                sh_current_percent = sh_elements[3] + '%';
+                $("#stock_data_sh").css('color', 'rgb(0, 100, 0)');
+            }
+            var sh_current_volume = sh_elements[4];
+            var sh_current_turnover = sh_elements[5];
+            // sh_current_turnover = (parseFloat(sh_current_turnover)/10000).toFixed(2);
+            $("#sh_name").html(sh_name);
+            $("#sh_current_price").html(sh_current_price);
+            $("#sh_current_ups_downs").html(sh_current_ups_downs);
+            $("#sh_current_percent").html(sh_current_percent);
+            $("#sh_current_volume").html(sh_current_volume);
+            $("#sh_current_turnover").html(sh_current_turnover);
+        }
+
+
+        // 深证
+        function getSz(sz_elements) {
+            // var sz_elements = hq_str_s_sz399001.split(",");
+            var sz_name = sz_elements[0];
+            var sz_current_price = parseFloat(sz_elements[1]).toFixed(2);
+            var sz_ups_downs = parseFloat(sz_elements[2]).toFixed(2);
+            var sz_current_percent;
+            var sz_current_ups_downs;
+            if (sz_ups_downs >= 0) {
+                sz_current_ups_downs = '+' + sz_ups_downs;
+                sz_current_percent = '+' + sz_elements[3] + '%';
+                $("#stock_data_sz").css('color', 'rgb(255, 0, 20)');
+            } else {
+                sz_current_ups_downs = sz_ups_downs;
+                sz_current_percent = sz_elements[3] + '%';
+                $("#stock_data_sz").css('color', 'rgb(0, 100, 0)');
+            }
+            var sz_current_volume = sz_elements[4];
+            var sz_current_turnover = sz_elements[5];
+            // sz_current_turnover = (parseFloat(sz_current_turnover)/10000).toFixed(2);
+            $("#sz_name").html(sz_name);
+            $("#sz_current_price").html(sz_current_price);
+            $("#sz_current_ups_downs").html(sz_current_ups_downs);
+            $("#sz_current_percent").html(sz_current_percent);
+            $("#sz_current_volume").html(sz_current_volume);
+            $("#sz_current_turnover").html(sz_current_turnover);
+        }
+
+
+        // 创业
+        function getCy(cy_elements) {
+            // var cy_elements = hq_str_s_sz399006.split(",");
+            var cy_name = cy_elements[0];
+            var cy_current_price = parseFloat(cy_elements[1]).toFixed(2);
+            var cy_ups_downs = parseFloat(cy_elements[2]).toFixed(2);
+            var cy_current_percent;
+            var cy_current_ups_downs;
+            if (cy_ups_downs >= 0) {
+                cy_current_ups_downs = '+' + cy_ups_downs;
+                cy_current_percent = '+' + cy_elements[3] + '%';
+                $("#stock_data_cy").css('color', 'rgb(255, 0, 20)');
+            } else {
+                cy_current_ups_downs = cy_ups_downs;
+                cy_current_percent = cy_elements[3] + '%';
+                $("#stock_data_cy").css('color', 'rgb(0, 100, 0)');
+            }
+            var cy_current_volume = cy_elements[4];
+            var cy_current_turnover = cy_elements[5];
+            // cy_current_turnover = (parseFloat(cy_current_turnover)/10000).toFixed(2);
+            $("#cy_name").html(cy_name);
+            $("#cy_current_price").html(cy_current_price);
+            $("#cy_current_ups_downs").html(cy_current_ups_downs);
+            $("#cy_current_percent").html(cy_current_percent);
+            $("#cy_current_volume").html(cy_current_volume);
+            $("#cy_current_turnover").html(cy_current_turnover);
+        }
+
+        $.get(url, function (data, status) {
+            getSh(data.sh);
+            getSz(data.sz);
+            getCy(data.cy);
+        });
+
+        function initScheduler() {
+            var result;
+            $.get(url, function (data, status) {
+                result = data;
+                getSh(result.sh);
+                getSz(result.sz);
+                getCy(result.cy);
+            });
+        }
+
+        window.setInterval(function () {
+            initScheduler();
+        }, 5000);
+    });
+
+
+    function getMinuteData() {
+        var hour = 9;
+        var minute = 30;
+        var data = [];
+        var index = 0;
+        while (hour <= 11) {
+            while (minute < 60 && hour < 11) {
+                data[index++] = (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
+                minute++;
+            }
+            while (minute < 30 && hour == 11) {
+                data[index++] = (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
+                minute++;
+            }
+            if (minute == 30 && hour == 11) {
+                data[index++] = "11:30/13:00";
+            }
+            if (minute == 60) {
+                minute = 0;
+            }
+            hour++;
+        }
+        hour = 13;
+        minute = 1;
+        while (hour <= 15) {
+            while (minute < 60 && hour < 15) {
+                data[index++] = hour + ":" + (minute < 10 ? "0" + minute : minute);
+                minute++;
+            }
+            if (minute == 60) {
+                minute = 0;
+            }
+            if (hour == 15) {
+                data[index++] = "15:00"
+            }
+            hour++;
+        }
+        return data;
+    }
+
+    var minPrice = 0;
+    var maxPrice = 0;
+    var minPercent = 0;
+    var maxPercent = 0;
+
+    var minute_url = '/v1/stock/data/min/data';
+
+    function getStockData(x_data, code, type) {
+        $.get(minute_url + "/" + type + "/" + code, function (result, status) {
+            var stock_name = result.name + "[" + result.code + "]";
+            var date_time = result.info.time.substring(0, 11);
+            var yc = parseFloat(result.info.yc);
+            document.getElementById('stock_name').innerHTML = stock_name;
+            var stock_date = date_time + "09:30";
+            var stock_price = "价格：" + parseFloat(result.info.o).toFixed(2);
+            var stock_percent = "涨幅：" + (((parseFloat(result.info.o) - yc) / yc) * 100).toFixed(2) + "%";
+            document.getElementById('stock_date').innerHTML = stock_date;
+            document.getElementById('stock_price').innerHTML = stock_price;
+            document.getElementById('stock_percent').innerHTML = stock_percent;
+            var yc = parseFloat(result.info.yc);
+            var h = parseFloat(result.info.h);
+            var l = parseFloat(result.info.l);
+            var highChange;
+            var lowChange = yc - l;
+            if (h > yc) {
+                highChange = h - yc;
+            } else {
+                highChange = yc - h;
+            }
+            if (l > yc) {
+                lowChange = l - yc;
+            } else {
+                lowChange = yc - l;
+            }
+            var y_interval = 0;
+            if (highChange > lowChange) {
+                maxPrice = h;
+                minPrice = (yc - highChange).toFixed(2);
+                y_interval = highChange / 3;
+                maxPercent = highChange / yc;
+                minPercent = -maxPercent;
+            } else {
+                maxPrice = (yc + lowChange).toFixed(2);
+                minPrice = l;
+                y_interval = lowChange / 3;
+                maxPercent = lowChange / yc;
+                minPercent = -maxPercent;
+            }
+            var y_interva2 = maxPercent / 3;
+            var data1 = [];
+            var data2 = [];
+            for (var i = 0; i < result.data.length; i++) {
+                data1[i] = parseFloat(result.data[i].split(",")[1]).toFixed(2);
+                data2[i] = (parseFloat(result.data[i].split(",")[1]) - yc) / yc;
+            }
+            settingMinuteData(x_data, data1, data2, y_interval, y_interva2, yc, date_time);
+        });
+    }
+
+    function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, yc, date_time) {
+        var kLineChart = echarts.init(document.getElementById('k_line_main'));
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    show: true,
+                    type: 'cross',
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1
+                    }
+                },
+                formatter: function (params) {
+                    var stock_date = params[0].axisValue;
+                    if (params[0].axisValue == '11:30/13:00') {
+                        stock_date = '11:30';
+                    }
+                    var stock_price = "价格：" + params[0].value;
+                    var stock_percent = "涨幅：" + (params[1].value * 100).toFixed(2) + "%";
+                    document.getElementById('stock_date').innerHTML = date_time + stock_date;
+                    document.getElementById('stock_price').innerHTML = stock_price;
+                    document.getElementById('stock_percent').innerHTML = stock_percent;
+                    var res = "价格：" + params[0].value;
+                    res += "<br/>涨幅：" + (params[1].value * 100).toFixed(2) + "%";
+                    return res;
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: true,
+                    axisLabel: {
+                        interval: 29,
+                    },
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLine: {show: false},
+                    data: x_data
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    splitNumber: 5,
+                    minInterval: 0,
+                    interval: y_interval1,
+                    min: minPrice,
+                    max: maxPrice,
+                    axisTick: {       //y轴刻度线
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: function (v) {
+                            return v.toFixed(2);
+                        }
+                    },
+                    axisPointer: {
+                        show: true,
+                        label: {
+                            show: false, //不显示指示器的文本标签
+                        }
+                    }
+                },
+                {
+                    type: 'value',
+                    splitNumber: 5,
+                    minInterval: 0,
+                    interval: y_interval2,
+                    min: minPercent,
+                    max: maxPercent,
+                    axisTick: {       //y轴刻度线
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: function (v) {
+                            var rtn = (v * 100).toFixed(2);
+                            if (rtn == "-0.00") {
+                                rtn = " 0.00";
+                                v = 0.00;
+                            }
+                            if (v > 0) {
+                                rtn = " " + rtn;
+                            }
+                            return rtn + "%";
+                        }
+                    },
+                    axisPointer: {
+                        show: true,
+                        label: {
+                            show: false, //不显示指示器的文本标签
+                        }
+                    }
+                }
+            ],
+            // visualMap: {
+            //     show: false,
+            //     seriesIndex: 1,
+            //     pieces: [{
+            //         gt: 0,
+            //         color: 'green'
+            //     }, {
+            //         lte: 0,
+            //         color: 'red'
+            //     }]
+            // },
+            series: [
+                {
+                    name: '价格',
+                    type: 'line',
+                    yAxisIndex: 0,
+                    symbol: 'none',
+                    data: y_data1,
+                    markPoint: {
+                        symbol: 'emptyPin',
+                        itemStyle: {
+                            normal: {
+                                color: '#1e90ff',
+                                label: {
+                                    show: false,
+                                    position: 'top',
+                                    formatter: function (param) {
+                                        return param.value.toFixed(2);
+                                    }
+                                }
+                            }
+                        },
+                        data: [
+                            {type: 'max', name: '当日最高', symbolSize: 10},
+                            {type: 'min', name: '当日最低', symbolSize: 10}
+                        ]
+                    },
+                    markLine: {
+                        symbol: 'none',
+                        itemStyle: {
+                            normal: {
+                                color: '#1e90ff',
+                                label: {
+                                    show: false,
+                                    formatter: function (param) {
+                                        return param.value.toFixed(2);
+                                    }
+                                }
+                            }
+                        },
+                        data: [
+                            {yAxis: yc}
+                        ]
+                    }
+                },
+                {
+                    name: '涨幅',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    symbol: 'none',
+                    itemStyle: {
+                        normal: {
+                            color: '#006400'
+                        }
+                    },
+                    data: y_data2
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        kLineChart.setOption(option);
+    }
+
+    getStockData(getMinuteData(), "000001", "sh");
+
+    var timer = null;
+
+    function settingMinuteLine(code, type) {
+        if (timer != null) {
+            clearInterval(timer);
+        }
+        getStockData(getMinuteData(), code, type);
+        timer = setInterval(function () {
+            getStockData(getMinuteData(), code, type);
+        }, 3000);
+    }
+
+</script>
