@@ -31,4 +31,10 @@ public interface UpDownPercentMapper extends BaseMapper<UpDownPercent> {
     @Select("select count(id) from up_down_percent where to_days(create_date) = to_days(now())")
     Integer currentCount();
 
+    /**
+     * description: 查询某一天涨停的数据
+     * @return 数据
+     */
+    List<UpDownPercent> getHistoryUpByDate(String dateStr);
+
 }

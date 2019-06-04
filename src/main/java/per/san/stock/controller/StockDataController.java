@@ -46,10 +46,17 @@ public class StockDataController {
     public ResponseEntity<Map<String, List<String>>> getMarketIndex() {
         return new ResponseEntity<>(iStockDataService.getMarketIndex(), HttpStatus.OK);
     }
+
     @ApiOperation(value = "分时数据")
     @GetMapping("/min/data/{type}/{code}")
     public ResponseEntity<Map<String, Object>> getMinuteData(@PathVariable("code") String code,
                                                              @PathVariable("type") String type) {
         return new ResponseEntity<>(iStockDataService.getMinuteData(code, type), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "历史涨停股实时数据")
+    @GetMapping("/history/data/current")
+    public ResponseEntity<List<List<Object>>> getHistoryDataCurrent(@RequestParam("date") String date) {
+        return new ResponseEntity<>(iStockDataService.getHistoryDataCurrent(date), HttpStatus.OK);
     }
 }

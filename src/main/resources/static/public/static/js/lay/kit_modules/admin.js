@@ -34,7 +34,7 @@ layui.define(mods, function (e) {
                 shade: !0,
                 dynamicRender: !0,
                 url: "views/setting.html"
-            }), "help" === t && l.alert("QQ群：248049395，616153456")
+            }), "help" === t && syncData()
         }), layui.mockjs.inject(APIs), "SPA" === i.loadType && n.render(), "function" == typeof e && e()
     };
     var u = {

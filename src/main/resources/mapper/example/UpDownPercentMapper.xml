@@ -11,4 +11,13 @@
             </foreach>
         </where>
     </delete>
+
+    <select id="getHistoryUpByDate" resultType="per.san.example.domain.UpDownPercent">
+        select * from up_down_percent
+        <where>
+            and trend_status = 'up'
+            and DATE_FORMAT(create_date,'%Y-%m-%d') = #{dateStr}
+        </where>
+        order by id ASC limit 30
+    </select>
 </mapper>

@@ -35,4 +35,10 @@ public interface IStockDataService {
      * @return 数据
      */
     Map<String, Object> getMinuteData(String code, String type);
+
+    /**
+     * description:
+     * @return 数据
+     */
+    List<List<Object>> getHistoryDataCurrent(String date);
 }
