@@ -34,7 +34,7 @@ layui.define(mods, function (e) {
                 shade: !0,
                 dynamicRender: !0,
                 url: "views/setting.html"
-            }), "help" === t && syncData()
+            }), "sync_data" === t && syncData(), "fullscreen" === t && fullScreen()
         }), layui.mockjs.inject(APIs), "SPA" === i.loadType && n.render(), "function" == typeof e && e()
     };
     var u = {

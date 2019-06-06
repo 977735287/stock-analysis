@@ -2,10 +2,34 @@
 <link rel="stylesheet" th:href="@{public/stock/css/default.css}" id="app">
 <style scoped>
 </style>
-<div class="layui-fluid">
+<div class="layui-fluid" id="content_full">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-row layui-col-space15">
+                <div class="layui-col-md4">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header">昨日涨停股</div>
+                                <div class="layui-card-body" style="margin-left: 5px">
+                                    <table lay-filter="parse-table-demo" lay-skin="line">
+                                        <thead>
+                                        <tr>
+                                            <th width="80">股票</th>
+                                            <th width="60">最新</th>
+                                            <th width="60">涨幅</th>
+                                            <th width="60">涨跌</th>
+                                            <th width="60">竞买价</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="history_data_current">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="layui-col-md8">
                     <div class="layui-row layui-col-space15">
                         <div class="layui-col-md4">
@@ -143,7 +167,7 @@
                         </div>
                         <div class="layui-col-md6">
                             <div class="layui-card">
-                                <div class="layui-card-header">ECharts</div>
+                                <div class="layui-card-header">我的自选</div>
                                 <div class="layui-card-body">
                                     <div id="container1" style="height:350px;"></div>
                                 </div>
@@ -170,30 +194,6 @@
                                 <div class="layui-card-header">数据统计</div>
                                 <div class="layui-card-body">
                                     <table id="demo_hash" lay-filter="test_hash"></table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-md4">
-                    <div class="layui-row layui-col-space15">
-                        <div class="layui-col-md12">
-                            <div class="layui-card">
-                                <div class="layui-card-header">昨日涨停股</div>
-                                <div class="layui-card-body" style="margin-left: 5px">
-                                    <table lay-filter="parse-table-demo" lay-skin="line">
-                                        <thead>
-                                        <tr>
-                                            <th width="80">股票</th>
-                                            <th width="60">最新</th>
-                                            <th width="60">涨幅</th>
-                                            <th width="60">涨跌</th>
-                                            <th width="60">竞买价</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="history_data_current">
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -691,5 +691,14 @@
             if(new RegExp("("+ k +")").test(fmt))
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
         return fmt;
+    }
+    
+    function fullScreen() {
+        var el = document.getElementById('content_full');
+        var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+        if(typeof rfs != "undefined" && rfs) {
+            rfs.call(el);
+        };
+        return;
     }
 </script>

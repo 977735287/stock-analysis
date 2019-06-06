@@ -158,9 +158,6 @@ public class StockDataServiceImpl implements IStockDataService {
             e.printStackTrace();
         }
         List<UpDownPercent> upDownPercents = upDownPercentMapper.getHistoryUpByDate(date);
-        upDownPercents = upDownPercents.stream().filter(item
-                -> "0".equals(item.getCode().substring(0, 1)) || "6".equals(item.getCode().substring(0, 1)))
-                .collect(Collectors.toList());
         String param = "";
         List<String> codeList = upDownPercents.stream().map(UpDownPercent::getCode).collect(Collectors.toList());
         for (UpDownPercent item : upDownPercents) {
