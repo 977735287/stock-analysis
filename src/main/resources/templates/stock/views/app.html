@@ -10,7 +10,13 @@
                     <div class="layui-row layui-col-space15">
                         <div class="layui-col-md12">
                             <div class="layui-card">
-                                <div class="layui-card-header">昨日涨停股</div>
+                                <div class="layui-card-header">
+                                    昨日涨停股
+                                    <div class="layui-input-inline" style="text-align: right">
+                                        <input type="text" class="layui-input" style="border:none;" id="test1"
+                                               readonly="readonly">
+                                    </div>
+                                </div>
                                 <div class="layui-card-body" style="margin-left: 5px">
                                     <table lay-filter="parse-table-demo" lay-skin="line">
                                         <thead>
@@ -205,13 +211,26 @@
 </div>
 <script th:src="@{public/stock/js/default.js}"></script>
 <script>
+    var lastDate;
+
     layui.config({
         base: '/src/js/'
-    }).use(['jquery', 'mockjs', 'table'], function () {
-        var $ = layui.jquery,
-            layer = layui.layer,
-            table = layui.table;
+    }).use(['jquery', 'mockjs', 'table', 'laydate'], function () {
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
         var url = '/v1/stock/data/market';
+
+        laydate.render({
+            elem: '#test1',
+            lang: 'en',
+            type: 'datetime',
+            format: 'yyyyMMdd',
+            change: function(value, date){ //监听日期被切换
+                var date = value.substring(0, 4) + '-' + value.substring(4, 6) + '-' + value.substring(6, 8);
+                console.info(date);
+                getHistoryDataCurrent(date);
+            }
+        });
 
         // 上证
         function getSh(sh_elements) {
@@ -383,6 +402,7 @@
             var yc = parseFloat(result.info.yc);
             var h = parseFloat(result.info.h);
             var l = parseFloat(result.info.l);
+            var c = parseFloat(result.info.c);
             var highChange;
             var lowChange = yc - l;
             if (h > yc) {
@@ -409,18 +429,36 @@
                 maxPercent = lowChange / yc;
                 minPercent = -maxPercent;
             }
-            var y_interva2 = maxPercent / 3;
+            var y_interval2 = maxPercent / 3;
             var data1 = [];
             var data2 = [];
             for (var i = 0; i < result.data.length; i++) {
                 data1[i] = parseFloat(result.data[i].split(",")[1]).toFixed(2);
                 data2[i] = (parseFloat(result.data[i].split(",")[1]) - yc) / yc;
             }
-            settingMinuteData(x_data, data1, data2, y_interval, y_interva2, yc, date_time);
+            var lineColor;
+            if (c > yc) {
+                lineColor = '#ff0d20';
+            } else if (c < yc) {
+                lineColor = '#034f04';
+            } else {
+                lineColor = '#000000';
+            }
+            var params = {
+                x_data: x_data,
+                data1: data1,
+                data2: data2,
+                y_interval: y_interval,
+                y_interval2: y_interval2,
+                yc: yc,
+                date_time: date_time,
+                lineColor: lineColor
+            };
+            settingMinuteData(params);
         });
     }
 
-    function settingMinuteData(x_data, y_data1, y_data2, y_interval1, y_interval2, yc, date_time) {
+    function settingMinuteData(params) {
         var kLineChart = echarts.init(document.getElementById('k_line_main'));
         var option = {
             tooltip: {
@@ -440,7 +478,7 @@
                     }
                     var stock_price = "价格：" + params[0].value;
                     var stock_percent = "涨幅：" + (params[1].value * 100).toFixed(2) + "%";
-                    document.getElementById('stock_date').innerHTML = date_time + stock_date;
+                    document.getElementById('stock_date').innerHTML = params.date_time + stock_date;
                     document.getElementById('stock_price').innerHTML = stock_price;
                     document.getElementById('stock_percent').innerHTML = stock_percent;
                     var res = "价格：" + params[0].value;
@@ -458,7 +496,7 @@
                     axisTick: {show: false},
                     splitLine: {show: false},
                     axisLine: {show: false},
-                    data: x_data
+                    data: params.x_data
                 }
             ],
             yAxis: [
@@ -466,7 +504,7 @@
                     type: 'value',
                     splitNumber: 5,
                     minInterval: 0,
-                    interval: y_interval1,
+                    interval: params.y_interval,
                     min: minPrice,
                     max: maxPrice,
                     axisTick: {       //y轴刻度线
@@ -488,7 +526,7 @@
                     type: 'value',
                     splitNumber: 5,
                     minInterval: 0,
-                    interval: y_interval2,
+                    interval: params.y_interval2,
                     min: minPercent,
                     max: maxPercent,
                     axisTick: {       //y轴刻度线
@@ -532,7 +570,7 @@
                     type: 'line',
                     yAxisIndex: 0,
                     symbol: 'none',
-                    data: y_data1,
+                    data: params.data1,
                     markPoint: {
                         symbol: 'emptyPin',
                         itemStyle: {
@@ -566,7 +604,7 @@
                             }
                         },
                         data: [
-                            {yAxis: yc}
+                            {yAxis: params.yc}
                         ]
                     }
                 },
@@ -577,10 +615,10 @@
                     symbol: 'none',
                     itemStyle: {
                         normal: {
-                            color: '#006400'
+                            color: params.lineColor
                         }
                     },
-                    data: y_data2
+                    data: params.data2
                 }
             ]
         };
@@ -605,6 +643,7 @@
 
 
     var history_current_url = '/v1/stock/data/history/data/current';
+
     function getHistoryDataCurrent(date) {
         $.get(history_current_url + "?date=" + date, function (result, status) {
             var html = '';
@@ -622,23 +661,23 @@
                 var color2 = '';
                 if (up_down_price > 0) {
                     color = '#ff0014';
-                }else if (up_down_price < 0) {
+                } else if (up_down_price < 0) {
                     color = '#034f04';
-                }else {
+                } else {
                     color = '#000000';
                 }
                 if (in_perice > lastEnd) {
                     color1 = '#ff0014';
                 } else if (in_perice < lastEnd) {
                     color1 = '#034f04';
-                }else {
+                } else {
                     color1 = '#000000';
                 }
                 if (out_price > lastEnd) {
                     color2 = '#ff0014';
                 } else if (out_price < lastEnd) {
                     color2 = '#034f04';
-                }else {
+                } else {
                     color2 = '#000000';
                 }
                 html += '<tr><td><div style="font-size: 13px">' + name +
@@ -654,8 +693,8 @@
     }
 
     var curDate = new Date();
-    var preDate = new Date(curDate.getTime() - 24*60*60*1000);
-    var lastDate = dateFtt("yyyy-MM-dd", preDate);
+    var preDate = new Date(curDate.getTime() - 24 * 60 * 60 * 1000);
+    lastDate = dateFtt("yyyy-MM-dd", preDate);
     getHistoryDataCurrent(lastDate);
 
     var timer1 = null;
@@ -670,35 +709,35 @@
     }
 
     function syncData() {
-        settingMinuteLine("000001",  "sh");
+        settingMinuteLine("000001", "sh");
         settingHistoryData(lastDate);
     }
 
-    function dateFtt(fmt,date)
-    { //author: meizz
+    function dateFtt(fmt, date) { //author: meizz
         var o = {
-            "M+" : date.getMonth()+1,                 //月份
-            "d+" : date.getDate(),                    //日
-            "h+" : date.getHours(),                   //小时
-            "m+" : date.getMinutes(),                 //分
-            "s+" : date.getSeconds(),                 //秒
-            "q+" : Math.floor((date.getMonth()+3)/3), //季度
-            "S"  : date.getMilliseconds()             //毫秒
+            "M+": date.getMonth() + 1,                 //月份
+            "d+": date.getDate(),                    //日
+            "h+": date.getHours(),                   //小时
+            "m+": date.getMinutes(),                 //分
+            "s+": date.getSeconds(),                 //秒
+            "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds()             //毫秒
         };
-        if(/(y+)/.test(fmt))
-            fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
-        for(var k in o)
-            if(new RegExp("("+ k +")").test(fmt))
-                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
-    
+
     function fullScreen() {
         var el = document.getElementById('content_full');
         var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-        if(typeof rfs != "undefined" && rfs) {
+        if (typeof rfs != "undefined" && rfs) {
             rfs.call(el);
-        };
+        }
+        ;
         return;
     }
 </script>
