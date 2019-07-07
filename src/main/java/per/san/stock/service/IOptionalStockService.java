@@ -90,4 +90,10 @@ public interface IOptionalStockService {
     */
     OptionalStock queryById(Long id);
 
+    /**
+     * description:
+     * @return 数据
+     */
+    List<List<Object>> getOptionalDataCurrent();
+
 }

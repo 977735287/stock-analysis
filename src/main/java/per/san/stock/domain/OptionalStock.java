@@ -39,6 +39,12 @@ public class OptionalStock {
     @Column(name = "area", columnDefinition = "VARCHAR")
     private String area;
 
+    /**
+     * sequence
+     */
+    @Column(name = "sequence", columnDefinition = "BIGINT")
+    private Integer sequence;
+
     public Integer getId() {
         return this.id;
     }
@@ -69,5 +75,13 @@ public class OptionalStock {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 }

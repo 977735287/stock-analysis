@@ -149,7 +149,7 @@
                         <div class="layui-col-md12">
                             <div class="layui-card">
                                 <div class="layui-card-body">
-                                    <div style="text-align: left; font-size: 12px; margin-top: 6px; margin-left: 85px">
+                                    <div style="text-align: left; font-size: 12px; margin-top: 10px; margin-left: 85px">
                                         <span id="stock_name"></span>&nbsp;&nbsp;
                                         <span id="stock_date"></span>&nbsp;&nbsp;
                                         <span id="stock_price"></span>&nbsp;&nbsp;
@@ -157,7 +157,7 @@
                                         <span id="stock_volume"></span>&nbsp;&nbsp;
                                     </div>
                                     <div id="k_line_main" style="width: 100%;height: 300px;margin-top: -50px;"></div>
-                                    <div style="text-align:center; margin-top: -18px">
+                                    <div style="text-align:center; margin-top: -18px; margin-bottom: 9px">
                                         <button class="layui-btn layui-btn-primary layui-btn-xs"
                                                 onclick="settingMinuteLine('000001','sh')">上证指数
                                         </button>
@@ -174,35 +174,58 @@
                         <div class="layui-col-md6">
                             <div class="layui-card">
                                 <div class="layui-card-header">我的自选</div>
-                                <div class="layui-card-body">
-                                    <div id="container1" style="height:350px;"></div>
+                                <div class="layui-card-body" style="margin-left: 5px">
+                                    <table lay-filter="parse-table-demo" lay-skin="line">
+                                        <thead>
+                                        <tr>
+                                            <th width="80">股票</th>
+                                            <th width="60">最新</th>
+                                            <th width="60">涨幅</th>
+                                            <th width="60">涨跌</th>
+                                            <th width="60">竞买价</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="optional_data_current1">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="layui-col-md6">
                             <div class="layui-card">
-                                <div class="layui-card-header">ECharts</div>
-                                <div class="layui-card-body">
-                                    <div id="main" style="height:350px;"></div>
+                                <div class="layui-card-header">我的自选</div>
+                                <div class="layui-card-body" style="margin-left: 5px">
+                                    <table lay-filter="parse-table-demo" lay-skin="line">
+                                        <thead>
+                                        <tr>
+                                            <th width="80">股票</th>
+                                            <th width="60">最新</th>
+                                            <th width="60">涨幅</th>
+                                            <th width="60">涨跌</th>
+                                            <th width="60">竞买价</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="optional_data_current2"></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="layui-col-md12">
-                            <div class="layui-card">
-                                <div class="layui-card-header">ECharts</div>
-                                <div class="layui-card-body">
-                                    <div id="main1" style="height:350px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-col-md12">
-                            <div class="layui-card">
-                                <div class="layui-card-header">数据统计</div>
-                                <div class="layui-card-body">
-                                    <table id="demo_hash" lay-filter="test_hash"></table>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="layui-col-md12">-->
+                            <!--<div class="layui-card">-->
+                                <!--<div class="layui-card-header">ECharts</div>-->
+                                <!--<div class="layui-card-body">-->
+                                    <!--<div id="main1" style="height:350px;"></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="layui-col-md12">-->
+                            <!--<div class="layui-card">-->
+                                <!--<div class="layui-card-header">数据统计</div>-->
+                                <!--<div class="layui-card-body">-->
+                                    <!--<table id="demo_hash" lay-filter="test_hash"></table>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -648,6 +671,7 @@
         $.get(history_current_url + "?date=" + date, function (result, status) {
             var html = '';
             for (var i = 0; i < result.length; i++) {
+                var type = '';
                 var name = result[i][0];
                 var code = result[i][33];
                 var current = parseFloat(result[i][3]);
@@ -659,6 +683,11 @@
                 var color = '';
                 var color1 = '';
                 var color2 = '';
+                if (code.substring(0, 1) == '0'){
+                    type = 'sz';
+                } else if (code.substring(0, 1) == '6'){
+                    type = 'sh';
+                }
                 if (up_down_price > 0) {
                     color = '#ff0014';
                 } else if (up_down_price < 0) {
@@ -680,9 +709,11 @@
                 } else {
                     color2 = '#000000';
                 }
-                html += '<tr><td><div style="font-size: 13px">' + name +
-                    '</div><div style="font-size: 11px; margin-top: -6px">' + code +
-                    '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
+                html += '<tr><td><div style="font-size: 13px">' +
+                    '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + name +
+                    '</span></div><div style="font-size: 11px; margin-top: -6px">' +
+                    '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + code +
+                    '</span></div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
                     '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + percent +
                     '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + up_down_price.toFixed(2) +
                     '</div></td><td style="color: ' + color1 + '"><div style="font-size: 18px">' + in_perice.toFixed(2) +
@@ -692,10 +723,118 @@
         });
     }
 
+
+    var optional_current_url = '/v1/optional/stock/data/current';
+
+    function getOptionalDataCurrent() {
+        $.get(optional_current_url, function (result, status) {
+            var html1 = '';
+            var html2 = '';
+            var isMax30 = false;
+            var half = 0;
+            if (result.length >= 30) {
+                isMax30 = true;
+            }
+            if (result.length % 2 == 0) {
+                half = result.length / 2;
+            } else {
+                half = result.length / 2 + 1;
+            }
+            for (var i = 0; i < result.length; i++) {
+                var type = '';
+                var name = result[i][0];
+                var code = result[i][33];
+                var current = parseFloat(result[i][3]);
+                var lastEnd = parseFloat(result[i][2]);
+                var in_perice = parseFloat(result[i][6]);
+                var out_price = parseFloat(result[i][7]);
+                var up_down_price = current - lastEnd;
+                var percent = ((up_down_price / lastEnd) * 100).toFixed(2) + "%";
+                var color = '';
+                var color1 = '';
+                var color2 = '';
+                if (code.substring(0, 1) == '0'){
+                    type = 'sz';
+                } else if (code.substring(0, 1) == '6'){
+                    type = 'sh';
+                }
+                if (up_down_price > 0) {
+                    color = '#ff0014';
+                } else if (up_down_price < 0) {
+                    color = '#034f04';
+                } else {
+                    color = '#000000';
+                }
+                if (in_perice > lastEnd) {
+                    color1 = '#ff0014';
+                } else if (in_perice < lastEnd) {
+                    color1 = '#034f04';
+                } else {
+                    color1 = '#000000';
+                }
+                if (out_price > lastEnd) {
+                    color2 = '#ff0014';
+                } else if (out_price < lastEnd) {
+                    color2 = '#034f04';
+                } else {
+                    color2 = '#000000';
+                }
+                if (isMax30) {
+                    if (i < half) {
+                        html1 += '<tr><td><div style="font-size: 13px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + name +
+                            '</span></div><div style="font-size: 11px; margin-top: -6px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + code +
+                            '</span></div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + percent +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + up_down_price.toFixed(2) +
+                            '</div></td><td style="color: ' + color1 + '"><div style="font-size: 18px">' + in_perice.toFixed(2) +
+                            '</div></td></tr>';
+                    } else {
+                        html2 += '<tr><td><div style="font-size: 13px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + name +
+                            '</span></div><div style="font-size: 11px; margin-top: -6px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + code +
+                            '</span></div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + percent +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + up_down_price.toFixed(2) +
+                            '</div></td><td style="color: ' + color1 + '"><div style="font-size: 18px">' + in_perice.toFixed(2) +
+                            '</div></td></tr>';
+                    }
+                }else {
+                    if (i < 16) {
+                        html1 += '<tr><td><div style="font-size: 13px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + name +
+                            '</span></div><div style="font-size: 11px; margin-top: -6px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + code +
+                            '</span></div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + percent +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + up_down_price.toFixed(2) +
+                            '</div></td><td style="color: ' + color1 + '"><div style="font-size: 18px">' + in_perice.toFixed(2) +
+                            '</div></td></tr>';
+                    } else {
+                        html2 += '<tr><td><div style="font-size: 13px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + name +
+                            '</span></div><div style="font-size: 11px; margin-top: -6px">' +
+                            '<span onclick="settingMinuteLine(\'' + code + '\',\'' + type + '\')">' + code +
+                            '</span></div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + current.toFixed(2) +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + percent +
+                            '</div></td><td style="color: ' + color + '"><div style="font-size: 18px">' + up_down_price.toFixed(2) +
+                            '</div></td><td style="color: ' + color1 + '"><div style="font-size: 18px">' + in_perice.toFixed(2) +
+                            '</div></td></tr>';
+                    }
+                }
+            }
+            $("#optional_data_current1").html(html1);
+            $("#optional_data_current2").html(html2);
+        });
+    }
+
     var curDate = new Date();
     var preDate = new Date(curDate.getTime() - 24 * 60 * 60 * 1000);
     lastDate = dateFtt("yyyy-MM-dd", preDate);
     getHistoryDataCurrent(lastDate);
+    getOptionalDataCurrent();
 
     var timer1 = null;
 
@@ -705,6 +844,7 @@
         }
         timer1 = setInterval(function () {
             getHistoryDataCurrent(lastDate);
+            getOptionalDataCurrent();
         }, 6000);
     }
 

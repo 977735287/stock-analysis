@@ -27,4 +27,8 @@
             </foreach>
         </where>
     </delete>
+
+    <select id="queryList" resultType="per.san.stock.domain.OptionalStock">
+        select * from optional_stock order by sequence asc
+    </select>
 </mapper>

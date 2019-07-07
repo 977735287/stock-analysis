@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * description: 
@@ -37,6 +38,7 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
     private static final String historyInfoUrl = "http://q.stock.sohu.com/hisHq";
     private static final String marketIndexUrl = "http://hq.sinajs.cn/list=s_sh000001,s_sz399001,s_sz399006";
     private static final String minuteDataUrl = "http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js";
+    private static final String currentDataUrl = "http://hq.sinajs.cn/list=";
 
     @Autowired
     OptionalStockMapper optionalStockMapper;
@@ -102,5 +104,29 @@ public class OptionalStockServiceImpl implements IOptionalStockService {
     @Override
     public OptionalStock queryById(Long id) {
     return optionalStockMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<List<Object>> getOptionalDataCurrent() {
+        List<OptionalStock> optionalStocks = optionalStockMapper.queryList(new OptionalStock());
+        String param = "";
+        for (OptionalStock item : optionalStocks) {
+            param += item.getArea() + item.getCode() + ",";
+        }
+        if (!param.isEmpty()) {
+            param = param.substring(0, param.length() - 1);
+        }
+        String res = HttpRequest.get(null, currentDataUrl + param);
+        res = " " + res;
+        res = res.substring(0, res.length() - 1);
+        List<String> strings = Lists.newArrayList(res.split(";"));
+        strings = strings.stream().map(item -> item.substring(22, item.length() - 1)).collect(Collectors.toList());
+        List<List<Object>> lists = Lists.newArrayList();
+        for (int i = 0; i < strings.size(); i++) {
+            List<Object> list = Lists.newArrayList(strings.get(i).split(","));
+            list.add(optionalStocks.get(i).getCode());
+            lists.add(list);
+        }
+        return lists;
     }
 }

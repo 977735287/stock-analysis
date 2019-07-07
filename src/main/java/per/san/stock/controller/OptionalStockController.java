@@ -112,4 +112,10 @@ public class OptionalStockController {
             @PathVariable("id") Long id) {
         return new ResponseEntity<>(iOptionalStockService.queryById(id), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "自选股实时数据")
+    @GetMapping("/data/current")
+    public ResponseEntity<List<List<Object>>> getOptionalDataCurrent() {
+        return new ResponseEntity<>(iOptionalStockService.getOptionalDataCurrent(), HttpStatus.OK);
+    }
 }

@@ -37,4 +37,11 @@ public interface OptionalStockMapper extends BaseMapper<OptionalStock> {
      */
     Integer insertCodeList(@Param("codes") List<String> codes);
 
+    /**
+     * description: 查询列表
+     * @param optionalStock
+     * @return
+     */
+    List<OptionalStock> queryList(OptionalStock optionalStock);
+
 }

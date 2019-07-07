@@ -19,6 +19,6 @@
             and DATE_FORMAT(create_date,'%Y-%m-%d') = #{dateStr}
             and (substring(code,1,1) = '0' or substring(code,1,1) = '6')
         </where>
-        order by id ASC limit 20
+        order by id ASC limit 27
     </select>
 </mapper>
